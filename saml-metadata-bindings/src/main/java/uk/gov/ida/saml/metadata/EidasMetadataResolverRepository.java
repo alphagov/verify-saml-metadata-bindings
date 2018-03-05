@@ -182,4 +182,8 @@ public class EidasMetadataResolverRepository {
     private void setShortRefreshDelay() {
         delayBeforeNextRefresh = eidasMetadataConfiguration.getTrustAnchorMinRefreshDelay();
     }
+
+    public boolean hasMetadataResolverForEntity(String entityId){
+        return metadataResolvers.containsKey(entityId);
+    }
 }
