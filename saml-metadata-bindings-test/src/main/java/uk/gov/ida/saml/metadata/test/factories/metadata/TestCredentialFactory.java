@@ -64,7 +64,7 @@ public class TestCredentialFactory {
         return publicKey;
     }
 
-    private PublicKey createPublicKey(String partialCert) throws CertificateException, UnsupportedEncodingException {
+    public static PublicKey createPublicKey(String partialCert) throws CertificateException, UnsupportedEncodingException {
         CertificateFactory certificateFactory;
         certificateFactory = CertificateFactory.getInstance("X.509");
         String fullCert;

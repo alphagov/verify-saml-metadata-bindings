@@ -6,9 +6,12 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
+import org.opensaml.saml.security.impl.MetadataCredentialResolver;
+import org.opensaml.security.credential.CredentialResolver;
 import org.opensaml.xmlsec.signature.support.SignatureTrustEngine;
 import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
 import uk.gov.ida.saml.metadata.MetadataResolverConfiguration;
+import uk.gov.ida.saml.metadata.factories.CredentialResolverFactory;
 import uk.gov.ida.saml.metadata.factories.DropwizardMetadataResolverFactory;
 import uk.gov.ida.saml.metadata.factories.MetadataSignatureTrustEngineFactory;
 
@@ -19,6 +22,7 @@ public class MetadataResolverBundle<T extends Configuration> implements io.dropw
     private MetadataResolver metadataResolver;
     private DropwizardMetadataResolverFactory dropwizardMetadataResolverFactory = new DropwizardMetadataResolverFactory();
     private ExplicitKeySignatureTrustEngine signatureTrustEngine;
+    private MetadataCredentialResolver credentialResolver;
 
     public MetadataResolverBundle(MetadataConfigurationExtractor<T> configExtractor) {
         this.configExtractor = configExtractor;
@@ -29,6 +33,7 @@ public class MetadataResolverBundle<T extends Configuration> implements io.dropw
         MetadataResolverConfiguration metadataConfiguration = configExtractor.getMetadataConfiguration(configuration);
         metadataResolver = dropwizardMetadataResolverFactory.createMetadataResolver(environment, metadataConfiguration);
         signatureTrustEngine = new MetadataSignatureTrustEngineFactory().createSignatureTrustEngine(metadataResolver);
+        credentialResolver = new CredentialResolverFactory().create(metadataResolver);
     }
 
     @Override
@@ -46,6 +51,10 @@ public class MetadataResolverBundle<T extends Configuration> implements io.dropw
 
     public Provider<ExplicitKeySignatureTrustEngine> getSignatureTrustEngineProvider() {
         return () -> signatureTrustEngine;
+    }
+
+    public Provider<MetadataCredentialResolver> getMetadataCredentialResolver() {
+        return () -> credentialResolver;
     }
 
     public Module getMetadataModule() {
