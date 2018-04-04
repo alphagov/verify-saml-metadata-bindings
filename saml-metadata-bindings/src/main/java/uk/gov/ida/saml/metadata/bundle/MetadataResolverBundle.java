@@ -44,7 +44,7 @@ public class MetadataResolverBundle<T extends Configuration> implements io.dropw
         return () -> metadataResolver;
     }
 
-    public Provider<SignatureTrustEngine> getSignatureTrustEngineProvider() {
+    public Provider<ExplicitKeySignatureTrustEngine> getSignatureTrustEngineProvider() {
         return () -> signatureTrustEngine;
     }
 
