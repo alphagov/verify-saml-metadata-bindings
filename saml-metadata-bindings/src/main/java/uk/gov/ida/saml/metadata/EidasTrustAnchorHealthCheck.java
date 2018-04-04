@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EidasTrustAnchorHealthCheck extends HealthCheck {
 
@@ -40,7 +41,7 @@ public class EidasTrustAnchorHealthCheck extends HealthCheck {
     }
 
     private List<String> getErrorsCreatingMetadataResolvers(List<String> trustAnchorEntityIds) {
-        HashMap<String, MetadataResolver> metadataResolvers = metadataResolverRepository.getMetadataResolvers();
+        Map<String, MetadataResolver> metadataResolvers = metadataResolverRepository.getMetadataResolvers();
 
         if (trustAnchorEntityIds.size() > metadataResolvers.keySet().size()) {
             List<String> missingMetadataResolverEntityIds = new ArrayList<>(trustAnchorEntityIds);
@@ -52,7 +53,7 @@ public class EidasTrustAnchorHealthCheck extends HealthCheck {
     }
 
     private List<String> getErrorsResolvingMetadata() {
-        HashMap<String, MetadataResolver> metadataResolvers = metadataResolverRepository.getMetadataResolvers();
+        Map<String, MetadataResolver> metadataResolvers = metadataResolverRepository.getMetadataResolvers();
         List<String> errors = new ArrayList<>();
         for (String entityId : metadataResolvers.keySet()) {
             try {
